@@ -1,0 +1,9 @@
+---
+- name: creating empty file
+  hosts: all
+  become: no
+  tasks:
+    - name: crate a file
+      ansible.builtin.file:
+        path: /tmp/1.txt
+        state: touch
