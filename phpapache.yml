@@ -1,0 +1,28 @@
+---
+ - name: phpapache
+   hosts: all
+   become: yes
+   tasks:
+     - name: install apache2
+       ansible.builtin.apt:
+         name: apache2
+         update_cache: yes
+         state: present 
+     - name: install php libapache2-mod-php php-mysql
+       ansible.builtin.apt:
+         pkg:
+          - php
+          - libapache2-mod-php
+          - php-mysql
+         state: present
+     - name: crate a file info.php
+       ansible.builtin.lineinfile:
+         path: /var/www/html/info.php
+         line: <?php phpinfo( ); ?>
+         create: yes
+         state: present
+     - name: start apache2 service
+       ansible.builtin.service:
+         name: apache2
+         enabled: yes
+         state: started
