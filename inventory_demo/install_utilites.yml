@@ -10,6 +10,6 @@
   tasks:
     - name: install utilites
       ansible.builtin.package:
-        name: {{utilites}}
+        name: {{ utilites }}
         state: present
         update_cache: yes
