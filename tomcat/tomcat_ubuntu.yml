@@ -32,11 +32,11 @@
         remote_src: yes
     - name: Create a symbolic link
       ansible.builtin.file:
-      src: "{{ tomcat_home_dir }}/apache-tomcat-11.0.0-M19"
-      dest: "{{ tomcat_home_dir }}/latest"
-      owner: "{{ tomcat_user }}"
-      group: "{{ tomcat_user }}"
-      state: link
+        src: "{{ tomcat_home_dir }}/apache-tomcat-11.0.0-M19"
+        dest: "{{ tomcat_home_dir }}/latest"
+        owner: "{{ tomcat_user }}"
+        group: "{{ tomcat_user }}"
+        state: link
     - name:  Change the directory ownership
       ansible.builtin.file:
         path: "{{ tomcat_home_dir }}"
