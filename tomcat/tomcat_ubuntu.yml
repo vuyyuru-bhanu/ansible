@@ -1,0 +1,22 @@
+---
+- name: install tomcat
+  become: yes
+  hosts: appserver
+  vars:
+    tomcat_home_dir: /opt/tomcat
+    tomcat_user: tomcat
+    tomcat_default_shell: /bin/false
+
+  tasks:
+    - name: install java
+      ansible.builtin.package:
+        name: "{{ java_package }}"
+        state: present
+        update_cache: yes
+    -  name: create tomcat user
+       ansible.builtin.user:
+         name: "{{ tomcat_user }}"
+         group: "{{ tomcat_user }}"
+         shell: "{{ tomcat_default_shell }}"
+         create_home: true
+         home: "{{ tomcat_home_dir }}"
