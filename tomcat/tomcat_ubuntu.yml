@@ -52,7 +52,7 @@
     - name: create a unit file  
       ansible.builtin.lineinfile:
         path: /etc/systemd/system/tomcat.service
-        line: [Unit]
+        line: '[Unit]
               Description=Tomcat 9 servlet container
               After=network.target
 
@@ -74,7 +74,7 @@
               ExecStop=/opt/tomcat/latest/bin/shutdown.sh
 
               [Install]
-              WantedBy=multi-user.target
+              WantedBy=multi-user.target'
 
         create: yes
         state: present
