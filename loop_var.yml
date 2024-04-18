@@ -1,0 +1,15 @@
+---
+- name: learing loop with varaible
+  hosts: all
+  become: no
+  vars:
+    files:
+      - /tmp/4.txt
+      - /tmp/5.txt
+      - /tmp/6.txt
+  tasks:
+    - name: useing loop with varaibles
+      ansible.builtin.file:
+        path: "{{ item }}"
+        state: touch
+      loop: "{{ files }}"
