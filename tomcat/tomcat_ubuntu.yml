@@ -59,6 +59,7 @@
     - name: enable tomcat and start the service
       ansible.builtin.service:
         name: tomcat
+        daemon_reload: yes
         enabled: yes
         state: started
-        daemon_reload: yes
+        
