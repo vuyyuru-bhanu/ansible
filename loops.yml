@@ -1,0 +1,14 @@
+---
+- name: learning loops
+  hosts: all
+  become: no
+  tasks:
+    - name: loops learing
+      ansible.buitin.file:
+        path: "{{ item }}"
+        state: touch
+      loop:
+        - /tmp/1.txt
+        - /tmp/2.txt
+        - /tmp3.txt
+
