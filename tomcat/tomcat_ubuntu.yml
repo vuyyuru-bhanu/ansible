@@ -49,13 +49,13 @@
         path: "{{ item }}"
         state: file
         mode: u+x,g+x,o+x
-        with_fileglob:
-          - "/opt/tomcat/latest/bin/*.sh"
+      with_fileglob:
+        - "/opt/tomcat/latest/bin/*.sh"
     - name: copy the tomcat service unit file
       ansible.builtin.copy:
         src: tomcat.service
         dest: /etc/systemd/system/tomcat.service
-      
+        
     - name: enable tomcat and start the service
       ansible.builtin.service:
         name: tomcat
