@@ -78,3 +78,12 @@
 
         create: yes
         state: present
+    - name: Reload systemd daemon
+      systemd:
+        state: reloaded
+        daemon_reload: yes
+    - name: enable tomcat and start the service
+      ansible.builtin.service:
+        name: tomcat
+        enabled: yes
+        state: started
