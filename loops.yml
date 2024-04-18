@@ -4,7 +4,7 @@
   become: no
   tasks:
     - name: loops learing
-      ansible.buitin.file:
+      ansible.builtin.file:
         path: "{{ item }}"
         state: touch
       loop:
