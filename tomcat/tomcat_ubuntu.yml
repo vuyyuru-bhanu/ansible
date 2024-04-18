@@ -44,7 +44,11 @@
         recurse: yes
         owner: "{{ tomcat_user }}"
         group: "{{ tomcat_user }}"
-    
+    - name: making shell scripts inside the Tomcat is excutable 
+      ansible.builtin.file:
+        path: '/opt/tomcat/latest/bin/*.sh'
+        state: file
+        mode: u+x,g+x,o+x
     - name: create a unit file  
       ansible.builtin.lineinfile:
         path: /etc/systemd/system/tomcat.service
