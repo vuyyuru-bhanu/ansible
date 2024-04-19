@@ -6,8 +6,11 @@
     tomcat_home_dir: /opt/tomcat
     tomcat_user: tomcat
     tomcat_default_shell: /bin/false
-    tomcat_url: https://dlcdn.apache.org/tomcat/tomcat-11/v11.0.0-M19/bin/apache-tomcat-11.0.0-M19.tar.gz
-    tomcat_download_path: /tmp/apache-tomcat-11.0.0-M19.tar.gz
+    tomcat_url: https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.88/bin/apache-tomcat-9.0.88.tar.gz
+    tomcat_download_path: /tmp/apache-tomcat-9.0.88.tar.gz
+    tomcat-users.xml_path: /opt/tomcat/latest/conf/tomcat-users.xml
+    tomcat_manager_conf_location: /opt/tomcat/latest/webapps/manager/META-INF/context.xml
+    tomcat_hostmanager_conf_location: /opt/tomcat/latest/webapps/host-manager/META-INF/context.xml
   tasks:
     - name: install java
       ansible.builtin.package:
@@ -32,7 +35,7 @@
         remote_src: yes
     - name: Create a symbolic link
       ansible.builtin.file:
-        src: "{{ tomcat_home_dir }}/apache-tomcat-11.0.0-M19"
+        src: "{{ tomcat_home_dir }}/apache-tomcat-9.0.88"
         dest: "{{ tomcat_home_dir }}/latest"
         owner: "{{ tomcat_user }}"
         group: "{{ tomcat_user }}"
@@ -62,4 +65,20 @@
         daemon_reload: yes
         enabled: yes
         state: started
+    - name: copy the tomcat users xml
+      ansible.builtin.copy:
+        src: tomcat-users.xml
+        dest: "{{ tomcat-users.xml_path }}"
+    - name: copy manager context xml
+      ansible.builtin.copy:
+        src: manager-context.xml
+        dest: "{{ tomcat_manager_conf_location }}"
+    - name: copy host manager context xml
+      ansible.builtin.copy:
+        src: hostmanager-context.xml
+        dest: "{{ tomcat_hostmanager_conf_location }}"
+    - name: restart tomcat service
+      ansible.builtin.service:
+        name: tomcat
+        state: restarted
         
