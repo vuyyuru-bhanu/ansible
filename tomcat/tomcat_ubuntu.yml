@@ -18,7 +18,7 @@
         state: present
         update_cache: yes
        when:
-        - ansible_facts["distribution"] == "Ubuntu"
+         - ansible_facts["distribution"] == "Ubuntu"
     - name: create tomcat user
       ansible.builtin.user:
         name: "{{ tomcat_user }}"
