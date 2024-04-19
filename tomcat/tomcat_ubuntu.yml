@@ -8,7 +8,7 @@
     tomcat_default_shell: /bin/false
     tomcat_url: https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.88/bin/apache-tomcat-9.0.88.tar.gz
     tomcat_download_path: /tmp/apache-tomcat-9.0.88.tar.gz
-    tomcat-users.xml_path: /opt/tomcat/latest/conf/tomcat-users.xml
+    tomcat_users_location: /opt/tomcat/latest/conf/tomcat-users.xml
     tomcat_manager_conf_location: /opt/tomcat/latest/webapps/manager/META-INF/context.xml
     tomcat_hostmanager_conf_location: /opt/tomcat/latest/webapps/host-manager/META-INF/context.xml
   tasks:
@@ -68,7 +68,7 @@
     - name: copy the tomcat users xml
       ansible.builtin.copy:
         src: tomcat-users.xml
-        dest: "{{ tomcat-users.xml_path }}"
+        dest: "{{ tomcat_users_location }}"
     - name: copy manager context xml
       ansible.builtin.copy:
         src: manager-context.xml
