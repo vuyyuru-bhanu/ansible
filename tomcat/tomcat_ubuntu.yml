@@ -20,7 +20,6 @@
     - name: create tomcat user
       ansible.builtin.user:
         name: "{{ tomcat_user }}"
-        group: "{{ tomcat_user }}"
         shell: "{{ tomcat_default_shell }}"
         create_home: true
         home: "{{ tomcat_home_dir }}"
