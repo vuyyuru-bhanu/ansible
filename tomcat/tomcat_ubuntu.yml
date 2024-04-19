@@ -49,7 +49,7 @@
     - name: making shell scripts inside the Tomcat is excutable 
       ansible.builtin.file:
         path: "{{ item }}"
-        state: file
+        
         mode: u+x,g+x,o+x
       with_fileglob:
         - "/opt/tomcat/latest/bin/*.sh"
