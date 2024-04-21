@@ -19,6 +19,8 @@
       when: 
         - ansible_facts["distribution"] != "Ubuntu"
         - ansible_facts["distribution"] != "CentOS"
+    - ansible.builtin.debug:
+        msg: "Installing Java 11 with package {{ java_package }} "
     - name: install java
       ansible.builtin.package:
         name: "{{ java_package }}"
@@ -27,12 +29,16 @@
       when:
         - ansible_facts["distribution"] == "Ubuntu"
         - ansible_facts["distribution"] == "CentOS"
+    - ansible.builtin.debug:
+        msg: "Creating a user  {{ tomcat_user }} with home directory {{ tomcat_home_dir }} and shell {{ tomcat_default_shell }} "
     - name: create tomcat user
       ansible.builtin.user:
         name: "{{ tomcat_user }}"
         shell: "{{ tomcat_default_shell }}"
         create_home: true
         home: "{{ tomcat_home_dir }}"
+    - ansible.builtin.debug:
+        msg: "Downloading tomcat from {{ tomcat_url }} to {{ tomcat_download_path }}"
     - name: download tomcat tar file
       ansible.builtin.get_url:
         url: "{{ tomcat_url }}"
@@ -41,6 +47,8 @@
         - unarchive tomcat zip file
     - name: Flush handlers
       meta: flush_handlers
+    - ansible.builtin.debug:
+        msg: "Create a symbolic link"
     
     - name: Create a symbolic link
       ansible.builtin.file:
@@ -49,6 +57,8 @@
         owner: "{{ tomcat_user }}"
         group: "{{ tomcat_user }}"
         state: link
+    - ansible.builtin.debug:
+        msg: "Change the directory ownership to tomcat"
     - name:  Change the directory ownership
       ansible.builtin.file:
         path: "{{ tomcat_home_dir }}"
@@ -56,6 +66,8 @@
         recurse: yes
         owner: "{{ tomcat_user }}"
         group: "{{ tomcat_user }}"
+     - ansible.builtin.debug:
+        msg: "making shell scripts inside the Tomcat is excutable"
     - name: making shell scripts inside the Tomcat is excutable 
       ansible.builtin.file:
         path: "{{ item }}"
@@ -63,11 +75,14 @@
         mode: u+x,g+x,o+x
       with_fileglob:
         - "/opt/tomcat/latest/bin/*.sh"
+    - ansible.builtin.debug:
+        msg: "copy the tomcat service unit file from {{ source_service }} to {{ tomcat_service_file_location }}"
     - name: copy the tomcat service unit file
       ansible.builtin.copy:
         src: "{{ source_service }}"
         dest: "{{ tomcat_service_file_location }}"
-        
+    - ansible.builtin.debug:
+        msg: "enable tomcat and start the service"    
     - name: enable tomcat and start the service
       ansible.builtin.service:
         name: tomcat
