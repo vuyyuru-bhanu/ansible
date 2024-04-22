@@ -12,6 +12,8 @@
     tomcat_manager_conf_location: /opt/tomcat/latest/webapps/manager/META-INF/context.xml
     tomcat_hostmanager_conf_location: /opt/tomcat/latest/webapps/host-manager/META-INF/context.xml
     tomcat_service_file_location: /etc/systemd/system/tomcat.service
+    manager_username: root
+    manager_password: root
   tasks:
     - name: fail on unsupported devices
       ansible.builtin.fail:
@@ -87,8 +89,8 @@
         enabled: yes
         state: started
     - name: copy the tomcat users xml
-      ansible.builtin.copy:
-        src: tomcat-users.xml
+      ansible.builtin.template:
+        src: tomcat-users.xml.j2
         dest: "{{ tomcat_users_location }}"
       notify:
         - restart tomcat service
