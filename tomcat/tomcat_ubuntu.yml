@@ -78,8 +78,8 @@
     - ansible.builtin.debug:
         msg: "copy the tomcat service unit file from {{ source_service }} to {{ tomcat_service_file_location }}"
     - name: copy the tomcat service unit file
-      ansible.builtin.copy:
-        src: "{{ source_service }}"
+      ansible.builtin.template:
+        src: tomcat.service.j2
         dest: "{{ tomcat_service_file_location }}"
     - ansible.builtin.debug:
         msg: "enable tomcat and start the service"    
