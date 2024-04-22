@@ -26,9 +26,6 @@
         name: "{{ java_package }}"
         state: present
         update_cache: yes
-      when:
-        - ansible_facts["distribution"] == "Ubuntu"
-        - ansible_facts["distribution"] == "CentOS"
     - ansible.builtin.debug:
         msg: "Creating a user  {{ tomcat_user }} with home directory {{ tomcat_home_dir }} and shell {{ tomcat_default_shell }} "
     - name: create tomcat user
