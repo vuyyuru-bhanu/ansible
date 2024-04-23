@@ -1,0 +1,83 @@
+---
+ - name: installing nopcommerse
+   hosts: all
+   become: yes
+   vars:
+     key_url: https://packages.microsoft.com/config/ubuntu/22.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
+     nginx: /etc/nginx/sites-available/default
+     nop: /var/www/nopCommerce
+     nop_url: https://github.com/nopSolutions/nopCommerce/releases/download/release-4.60.6/nopCommerce_4.60.6_NoSource_linux_x64.zip
+     nop_srv:  /etc/systemd/system/nopCommerce.service
+   tasks:
+     - ansible.builtin.debug:
+        msg: " downloading Microsoft key and feed "
+     - name: Microsoft key and feed download
+       ansible.builtin.get_url:
+         url: "{{ key_url }}"
+         src: .
+     - ansible.builtin.debug:
+        msg: " install dpkg for ms "
+     - name: Allow python to be upgraded
+       ansible.builtin.dpkg_selections:
+         name: packages-microsoft-prod.deb
+         selection: install
+     - ansible.builtin.debug:
+        msg: " Install the .NET Core Runtime "
+     - name: Install the latest version of Apache and MariaDB
+       ansible.builtin.package:
+         name:
+           - apt-transport-https
+           - aspnetcore-runtime-7.0
+           - mysql-server
+           - nginx
+         state: started
+         update_cache: yes
+
+     - ansible.builtin.debug:
+        msg: " configure nginx as a reverse proxy to forward requests to your ASP.NET Core app "
+     - name: configure nginx as a reverse proxy to forward requests to your ASP.NET Core app
+       ansible.builtin.copy:
+         src: nginx_serv
+         dest: "{{ nginx }}"
+     - ansible.builtin.debug:
+        msg: " donwload nop "
+     - name: nop download
+       ansible.builtin.get_url:
+         url: "{{ nop_url }}"
+         src: "{{ nop }}"
+     - ansible.builtin.debug:
+        msg: " unzip nop "
+     - name: Unarchive nop
+       ansible.builtin.unarchive:
+         src: "{{ nop }}/nopCommerce_4.60.6_NoSource_linux_x64.zip"
+         dest: "{{ nop }}"
+         remote_src: yes
+     - name: create dir 
+       ansible.builtin.file:
+         path: "{{ item }}"
+         state: directory
+         mode: '0755'
+       loop:
+         - "{{ nop }}/bin"
+         - "{{ nop }}/logs"
+     - name: change the ownership of nop dir
+       ansible.builtin.file:
+         path: "{{ nop }}"
+         owner: www-data
+         group: www-data
+         recurse: yes
+         state: directory
+     - name: configure nop service
+       ansible.builtin.copy:
+         src: nop_srve
+         dest: "{{ nop_srv }}"
+     - name: start nop service
+      ansible.builtin.service:
+        name: nopCommerce.service
+        state: started
+     - name: restart tomcat service
+      ansible.builtin.service:
+        name: nginx
+        state: restarted
+
+     
