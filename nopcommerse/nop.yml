@@ -14,7 +14,7 @@
      - name: Microsoft key and feed download
        ansible.builtin.get_url:
          url: "{{ key_url }}"
-         src: .
+         src: /home/devops/
      - ansible.builtin.debug:
         msg: " install dpkg for ms "
      - name: Allow python to be upgraded
