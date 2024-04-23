@@ -72,12 +72,12 @@
          src: nop_srve
          dest: "{{ nop_srv }}"
      - name: start nop service
-      ansible.builtin.service:
-        name: nopCommerce.service
-        state: started
+       ansible.builtin.service:
+         name: nopCommerce.service
+         state: started
      - name: restart tomcat service
-      ansible.builtin.service:
-        name: nginx
-        state: restarted
+       ansible.builtin.service:
+         name: nginx
+         state: restarted
 
      
